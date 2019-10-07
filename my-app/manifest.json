@@ -1,0 +1,7 @@
+{
+  "name": "my-app",
+  "short_name": "my-app",
+  "description": "New Life Chapter",
+  "start_url": "/",
+  "display": "standalone"
+}
