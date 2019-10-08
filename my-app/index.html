@@ -4,18 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
   <title>my-app</title>
   <meta name="description" content="New Life Chapter">
-
   <!-- See https://goo.gl/OOhYW5 -->
   <link rel="manifest" href="/manifest.json">
-
   <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script type="module" src="/src/my-app/my-app.js" crossorigin></script>
 
   <script type="module">
-    import { LitElement, html, css } from 'lit-element';
+    import { LitElement, html, css, customElement, property } from 'lit-element';
     import 'https://unpkg.com/@polymer/paper-button/paper-button.js?module';
 
     function filterStories(stories, filter) {
@@ -52,6 +49,8 @@
       `;
     }
 
+    // @customElement('my-element') => export class MyElement extends LitElement => Registers <my-element> as an HTML tag.
+    // @property() foo = 'foo'; =>  Create an observed property. Triggers update on change.
     class MyElement extends LitElement {
       static get styles() {
         return css`
@@ -92,23 +91,12 @@
       }
 
       render() {
-        // const filteredArticles = this.articles.filter((article) => {
-        //   if (this.filter === 'read') return article.read;
-        //   if (this.filter === 'unread') return !article.read;
-        //   if (this.filter === 'all') return true;
-        // });
         const filteredArticles = filterStories(this.articles, this.filter);
 
         // <button @click=${() => this.filter = 'all'}>all</button>
         // <paper-button raised @click=${() => this.filter = 'all'}>
         //     all
-        //   </paper-button>
-        //   <paper-button raised @click=${() => this.filter = 'read'}>
-        //     read (${filterStories(this.articles, 'read').length})
-        //   </paper-button>
-        //   <paper-button raised @click=${() => this.filter = 'unread'}>
-        //     unread (${filterStories(this.articles, 'unread').length})
-        //   </paper-button>
+        // </paper-button>
         // <ul>
         //     ${filteredArticles.map(article => html`
         //       <my-article
@@ -159,10 +147,8 @@
         };
       }
 
-      // _toggleRead() {
-      //   this.read = !this.read;
-      // }
       _toggleRead() {
+        // this.read = !this.read;
         this.dispatchEvent(new CustomEvent('toggled', { detail: this.id }));
       }
 
@@ -191,3 +177,94 @@
 </body>
 
 </html>
+
+
+<!--
+  *** *** ***
+    Start
+  *** *** ***
+-->
+<!-- 
+Lit-HTML is a templating library that provides fast, efficient rendering and updating of HTML. It lets you express web UI as a function of data.
+LitElement uses lit-html to render into shadow DOM, and adds API to manage properties and attributes.
+Template literals - seperates dynamic and static content
+TemplateResult objects
+
+let myTemplate = (data) => html`<h1>${data.title}</h1><p>${data.body}</p>`
+To render a TemplateResult, call the render() function with a result and DOM container to render to:
+
+const result = myTemplate({title: 'Hello', body: 'lit-html is cool'});
+render(result, document.body); 
+
+// Node-style module import:
+import {html, render} from 'lit-html';
+// Browser-ready module import
+import {html, render} from '../node_modules/lit-html/lit-html.js';
+${user.isAdmin
+  ? html`<button>DELETE</button>`
+  : ''
+  }
+The DOM is inconsistent in some cases with its behavior towards undefined & null. Using an empty string ('') is the most consistent.
+import {nothing, html} from 'lit-html';
+html`<slot>Sorry, no content available. I am just fallback content</slot>`;
+html`
+<shadow-element>${user.isAdmin
+  ? html`<button>DELETE</button>`
+  : nothing
+  }</shadow-element>
+`;
+
+CACHE:
+const detailView = (data) => html`<div>...</div>`; 
+const summaryView = (data) => html`<div>...</div>`;
+html`${cache(data.showDetails
+  ? detailView(data) 
+  : summaryView(data)
+)}`
+In the example above, it would cache the DOM for both the summaryView and detailView templates. When you switch from one view to another, lit-html just needs to swap in the cached version of the new view, and update it with the latest data.
+
+STYLE:
+<style>
+  :host { ... } 
+  ::slotted(*)
+  .className { ... }
+</style>
+The shadow DOM API allows the creation of encapsulated DOM trees that are attached to a custom element.
+The root node of a shadow DOM tree is called the shadow root. The element in the main document that has a shadow root attached to it is called the host element, or host.
+
+templateFactory
+
+DIRECTIVES:
+Directives are functions that can extend lit-html by customizing the way a binding renders.
+const helloDirective = directive(() => (part) => { part.setValue('Hello')});
+const helloTemplate = html`<div>${helloDirective()}</div>`
+NodePart for content bindings.
+AttributePart for standard attribute bindings.
+BooleanAttributePart for boolean attribute bindings.
+EventPart for event bindings.
+PropertyPart for property bindings.
+- value
+- setValue
+- commit
++++ asyncAppend(asyncIterable), asyncReplace(asyncIterable), cache(conditionalTemplate), class=${classMap(classObj)}, ifDefined(value), guard(dependencies, valueFn), repeat(items, keyfn, template), styleMap, unsafeHTML(html), until(...values)
+
+Loading......
+import {until} from 'lit-html/directives/until.js';
+const content = fetch('./content.txt').then(r => r.text());
+html`${until(content, html`<span>Loading...</span>`)}`
+
+Streaming
+
+UI Components
+
+Properties Lit-Element:
+converter, type, attribute, reflect, noAccessor, hasChanged
+myProp: {
+  type: ,
+  hasChanged  (newVal, oldVal) {} 
+}
+
+
+Lifecycle callbacks: (Lit-Element):
+connectedCallback, disconnectedCallback, adoptedCallback, attributeChangedCallback
+-->
