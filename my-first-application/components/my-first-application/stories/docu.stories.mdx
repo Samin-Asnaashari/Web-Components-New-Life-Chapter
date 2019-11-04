@@ -1,0 +1,44 @@
+import { Story, Preview, Meta, Props } from '@storybook/addon-docs/blocks';
+import { html } from 'lit-html';
+
+import '../my-first-application.js';
+
+<Meta title="Card|Docs" />
+
+# MyFirstApplication
+
+A component for...
+
+## Features:
+
+- a
+- b
+- ...
+
+## How to use
+
+### Installation
+
+```bash
+yarn add my-first-application
+```
+
+```js
+import 'my-first-application/my-first-application.js';
+```
+
+<Preview withToolbar>
+  <Story name="Simple" height="220px">
+    {html`
+      <my-first-application></my-first-application>
+    `}
+  </Story>
+</Preview>
+
+## API
+
+<Props of="my-first-application" />
+
+## Playground
+
+Please select "Card Playground" story and open the knobs panel.
