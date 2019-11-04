@@ -1,0 +1,44 @@
+import { Story, Preview, Meta, Props } from '@storybook/addon-docs/blocks';
+import { html } from 'lit-html';
+
+import '../my-first-web-component.js';
+
+<Meta title="Card|Docs" />
+
+# MyFirstWebComponent
+
+A component for...
+
+## Features:
+
+- a
+- b
+- ...
+
+## How to use
+
+### Installation
+
+```bash
+yarn add my-first-web-component
+```
+
+```js
+import 'my-first-web-component/my-first-web-component.js';
+```
+
+<Preview withToolbar>
+  <Story name="Simple" height="220px">
+    {html`
+      <my-first-web-component></my-first-web-component>
+    `}
+  </Story>
+</Preview>
+
+## API
+
+<Props of="my-first-web-component" />
+
+## Playground
+
+Please select "Card Playground" story and open the knobs panel.
